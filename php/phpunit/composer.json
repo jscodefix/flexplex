@@ -1,0 +1,23 @@
+{
+    "name": "jscodefix/contrib-phpunit",
+    "description": "jscodefix contribution to phpunit",
+    "authors": [
+        {
+            "name": "Jeff Sheffel",
+            "email": "jeff@sheffel.org"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.1",
+        "psr/http-message": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DesignPatterns\\": "./tests/design-patterns/"
+        }
+    }
+}
