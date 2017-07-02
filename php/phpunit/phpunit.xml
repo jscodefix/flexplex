@@ -16,5 +16,6 @@
     </filter>
     <php>
         <const name="PHPUNIT_TESTSUITE" value="true"/>
+        <var name="myGlobalFromXml" value="Shazam"/>
     </php>
 </phpunit>
