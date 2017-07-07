@@ -24,7 +24,11 @@ class ChainTest extends TestCase
 
     public function testGlobalsAssignments()
     {
-        global $myGlobalFromCommand;    // defaults to null if not defined, so no need to first test for existence below
+        global $myGlobalBool;   // defaults to null if not defined, so no need to first test for existence below
+        global $myGlobalInt;
+        global $myGlobalFloat;
+        global $myGlobalString;
+        global $myGlobalHash;
 
         //fwrite(STDERR, print_r( $GLOBALS, true ));    // debug output $GLOBALS array
 
@@ -35,8 +39,16 @@ class ChainTest extends TestCase
         // check that phpunit.xml has expected global defined
         $this->assertNotNull($GLOBALS['myGlobalFromXml'], "Expecting a global in phpunit.xml defined as: myGlobalFromXml");
 
-        // check that command line has expected global defined (eg. --global myGlobalFromCommand="foo")
-        $this->assertNotNull($myGlobalFromCommand, "Expecting a global defined on command line as: --global myGlobalFromCommand=\"anything\"");
+        // check that command line has expected global defined (eg. --g myGlobalBool=true)
+        $this->assertTrue($myGlobalBool, "Expecting a global to be defined: -g myGlobalBool=true");
+
+        $this->assertEquals($myGlobalInt, 99, "Expecting a global to be defined: -g myGlobalInt=99");
+
+        $this->assertEquals(round($myGlobalFloat, 1), round((float)3.3, 1), "Expecting a global to be defined: -g myGlobalFloat=3.3");
+
+        $this->assertEquals($myGlobalString, "mysql:host=y;dbname=z", "Expecting a global to be defined: -g myGlobalString=\"mysql:host=y;dbname=z\"");
+
+        $this->assertEquals($myGlobalHash["bar"], "baz", "Expecting a global to be defined: -g myGlobalHash='[\"bar\"=>\"baz\"]'");
     }
 
     public function testCanRequestKeyInFastStorage()
