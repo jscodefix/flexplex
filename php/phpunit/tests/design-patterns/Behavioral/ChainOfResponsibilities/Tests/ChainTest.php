@@ -29,6 +29,8 @@ class ChainTest extends TestCase
         global $myGlobalFloat;
         global $myGlobalString;
         global $myGlobalHash;
+        global $myGlobalNull;
+        global $myGlobalEmpty;
 
         //fwrite(STDERR, print_r( $GLOBALS, true ));    // debug output $GLOBALS array
 
@@ -49,6 +51,10 @@ class ChainTest extends TestCase
         $this->assertEquals($myGlobalString, "mysql:host=y;dbname=z", "Expecting a global to be defined: -g myGlobalString=\"mysql:host=y;dbname=z\"");
 
         $this->assertEquals($myGlobalHash["bar"], "baz", "Expecting a global to be defined: -g myGlobalHash='[\"bar\"=>\"baz\"]'");
+
+        $this->assertNull($myGlobalNull, "Expecting a global to be defined: -g myGlobalNull=null");
+
+        $this->assertEmpty($myGlobalEmpty, "Expecting a global to be defined: -g myGlobalNull=");
     }
 
     public function testCanRequestKeyInFastStorage()
