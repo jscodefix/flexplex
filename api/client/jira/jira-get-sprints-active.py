@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
+# This script prints the current athndev Jira sprints by querying the Atlassian Jira server API.
+# Two shell environment variables must be set:
+#   JIRA_API_USER - the email address associated with a Jira account
+#   JIRA_API_KEY - create at: Jira -> Account Settings -> Security -> API token (or https://id.atlassian.com/manage/api-tokens)
 #
-# Refer to the python code at:
-# https://developer.atlassian.com/cloud/jira/software/rest/#api-rest-agile-1-0-board-boardId-sprint-get
+# Jira API docs: https://developer.atlassian.com/cloud/jira/software/rest/#api-rest-agile-1-0-board-boardId-sprint-get
 
 import sys
 import os
 import requests # http://docs.python-requests.org
 from requests.auth import HTTPBasicAuth
 import json
-
-server = 'https://athndev.atlassian.net/'
 
 try:  
   user = os.environ["JIRA_API_USER"]
@@ -18,22 +19,21 @@ except KeyError:
   print("ERROR: shell environment variables required: JIRA_API_USER, JIRA_API_KEY")
   sys.exit(1)
 
-# TODO: query for board id
-# https://your-domain.atlassian.net/rest/agile/1.0/board/{boardId}/sprint
-#url = "https://athndev.atlassian.net/rest/agile/1.0/board/4/sprint?startAt=0&maxResults=10"
 auth = HTTPBasicAuth(user, apikey)
 headers = {
    "Accept": "application/json"
 }
 
 sprint_names_active = []
+server = 'athndev.atlassian.net'
+board_id = 4  # project board ID found by navigating to Jira board in browser, eg.: athndev.atlassian.net/secure/RapidBoard.jspa?rapidView=4
 
 def fetch_sprints():
   blockSize = 10
   offset = 0
   i = 0
   while True:
-    url = f'https://athndev.atlassian.net/rest/agile/1.0/board/4/sprint?startAt={offset}&maxResults={blockSize}'
+    url = f'https://{server}/rest/agile/1.0/board/{board_id}/sprint?startAt={offset}&maxResults={blockSize}'
     response = requests.request(
       "GET",
       url,
@@ -57,7 +57,6 @@ def fetch_sprints():
 
 def is_active_sprint(sprint):
   #print("DEBUG:  name:  ", sprint['name'])
-  #print("DEBUG:  state: ", sprint['state'])
   try:
     if( sprint['state'] == 'active' ):
       return True
@@ -69,7 +68,7 @@ def is_active_sprint(sprint):
 fetch_sprints()
 print(sprint_names_active)
 
-# -----------------------------------------------------------------------------
+# notes -----------------------------------------------------------------------
 # example results:
 # {"maxResults"=>50, "startAt"=>0, "isLast"=>true, "values"=>[
 #  {"id"=>7,
